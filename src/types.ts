@@ -42,6 +42,17 @@ export interface TablePreview {
   rows: (string | number)[][];
 }
 
+export interface CitationDoc {
+  docId: string;
+  title: string;
+  section: string;
+  page: string;
+  excerpt: string;
+  relevanceScore: number;
+  warningLevel?: 'danger' | 'warning' | 'info';
+  version?: string;
+}
+
 export interface MessageResult {
   intent: IntentType;
   thoughtProcess?: string;
@@ -53,6 +64,7 @@ export interface MessageResult {
   tablePreview?: TablePreview;
   policySuggestions?: string[];
   followUpPrompts?: string[];
+  citationDocs?: CitationDoc[];
 }
 
 export interface ChatMessage {

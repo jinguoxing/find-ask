@@ -455,3 +455,266 @@ ORDER BY match_score ASC;`,
     }
   }
 ];
+
+export const TESLA_MANUAL_5_TURNS: ConversationTurnDemo[] = [
+  {
+    turnIndex: 1,
+    title: "第1轮 [车门紧急解锁]：后排机械车门释放与逃生拉手",
+    category: "问数",
+    userPrompt: "Model Y 在断电或紧急情况下，前排和后排车门如何进行机械解锁逃生？",
+    assistantResult: {
+      intent: "问数",
+      thoughtProcess: "1. 挂载知识库: 《特斯拉 Model Y 官方车主手册 v2026.4》- 章节 4.12 车辆无电状态下的车门打开。\n2. 匹配物理机械结构: 前排机械开关 vs 后排储物槽底盖应急拉索。\n3. 提取安全警告标识 (Warning) 与依据文档出处。",
+      summary: "【Model Y 车门紧急机械解锁操作指南】\n1. 前排车门：拉动位于车窗控制开关按钮正前方的【机械车门释放装置】（向上提起即可直接解锁弹开门锁）；\n2. 后排车门：需抬起后车门储物槽底部的软垫片，拔下内部的塑料密封橡胶盖，拉出其中的【紧急释放拉索】即可解锁后车门。\n重要提示：紧急机械拉手仅限 16V 低压供电断开或紧急故障时使用，正常状态下强行拉动可能磨损车门饰板或窗框密封条。",
+      kpiCards: [
+        { title: "前排解脱装置", value: "车窗按钮前", unit: "直接上提", trend: "100%物理结构", trendType: "neutral" },
+        { title: "后排解脱装置", value: "门槽底部盖", unit: "拉索解脱", trend: "需移除垫片", trendType: "neutral" },
+        { title: "适配低压电压", value: "16V / 12V", unit: "无电响应", trend: "纯机械连杆", trendType: "up" },
+        { title: "检索出处依据", value: "Sec 4.12", unit: "P.142-143", trend: "特斯拉官方认证", trendType: "neutral" }
+      ],
+      tablePreview: {
+        columns: ["车门位置", "解脱机构位置", "操作步骤与触发机制", "注意事项与安全级别"],
+        rows: [
+          ["前排左/右车门", "车窗按键正前方", "直接向上拉起机械拉手，释放门锁车勾", "🟢 简单直观，无电状态下 0.5s 快速弹门"],
+          ["后排左/右车门", "门板下储物槽底部", "1. 取出底部植绒垫片\n2. 移除橡胶盖\n3. 沿车尾方向拉动金属拉索", "🟡 需提前了解位置，建议车主为家庭成员演示"],
+          ["后备箱 (掀背门)", "尾门内饰板中央圆孔", "移除密封盖，用手指按下内部锁扣杠杆", "🔴 需从车内爬入后备箱，仅限车辆被淹等极度险情"]
+        ]
+      },
+      policySuggestions: [
+        "【安全建议】建议车主交车后熟悉后排门槽拉索位置，并在后排备有安全锤或急救应急工具。",
+        "【维护提醒】若非无电紧急情况，请勿频繁拉动前排机械拉手，以免中控屏提示‘车门未关紧’警告。"
+      ],
+      citationDocs: [
+        {
+          docId: "DOC-TESLA-MY-4.12",
+          title: "特斯拉 Model Y 车主手册 - 开启和关闭车门",
+          section: "Section 4.12 - 在无电情况下打开车门 (Opening Doors with No Power)",
+          page: "P.142-143",
+          excerpt: "如果 Model Y 失去电源，请按以下步骤手动打开车门：前排车门：向上拉动位于车窗开关前面的手动车门释放装置。后排车门： Model Y 的后车门配有手动车门释放装置，位于后车门储物槽底部。抬起储物槽底部的垫片，移除橡胶盖，然后向车尾方向拉动紧急释放拉索即可解脱门锁。",
+          relevanceScore: 99.4,
+          warningLevel: "warning",
+          version: "2026.4 CN v2 Edition"
+        }
+      ],
+      followUpPrompts: [
+        "如何开启 Autopilot 自动辅助驾驶，需要满足哪些摄像头条件？",
+        "前往超级充电站时电池预热有什么作用？冬季如何提升续航？",
+        "哨兵模式和行车记录仪如何配置 U 盘存储？提示速度过慢怎么处理？"
+      ]
+    }
+  },
+  {
+    turnIndex: 2,
+    title: "第2轮 [Autopilot/FSD]：辅助驾驶开启与舱内摄像头监视",
+    category: "问数",
+    userPrompt: "如何开启 Autopilot 自动辅助驾驶？驾驶员监视摄像头和前视摄像头有哪些触发限制？",
+    assistantResult: {
+      intent: "问数",
+      thoughtProcess: "1. 检索手册章节: Section 7.02 Autopilot 自动辅助转向与驾驶员监控。\n2. 解析硬件要求: 8个车身摄像头、车内驾驶员专注度摄像头与驾驶杆/滚轮双击指令。\n3. 梳理安全罢工机制 (Safety Strikeout): 5次警告禁用规则。",
+      summary: "【Autopilot 自动辅助驾驶开启与安全监控】\n1. 激活操作：在中控屏‘控制’->‘Autopilot’中开启功能。行驶中连续向下拨动右侧控制杆两次（或快速双击方向盘右滚轮），中控屏车道线变蓝并伴随音效即已激活；\n2. 摄像头与监控：车内后视镜上方的【驾驶员监视摄像头】会实时捕捉眼球轨迹与头部姿态。若检测到驾驶员看手机、闭眼或手离开方向盘，系统将发出逐步升级的声光预警；\n3. 罢工封禁机制：若驾驶员忽视预警导致系统强制退出 Autopilot，累计 5 次‘安全罢工’后，车辆将在 7 天内禁止使用 Autopilot 辅助驾驶功能。",
+      kpiCards: [
+        { title: "激活操作方式", value: "杆/滚轮双击", unit: "蓝线确认", trend: "0.2s 快速响应", trendType: "up" },
+        { title: "车外感知视角", value: "8 个摄像头", unit: "360° 覆盖", trend: "纯视觉路线", trendType: "up" },
+        { title: "舱内监控类型", value: "驾驶员视角", unit: "眼球+双手", trend: "实时视线追踪", trendType: "neutral" },
+        { title: "安全 strike 限制", value: "5 次违规", unit: "封禁 7 天", trend: "强制安全规约", trendType: "down" }
+      ],
+      chart: {
+        type: "bar",
+        title: "Autopilot 辅助驾驶摄像头感知工作状态与清障要求",
+        xAxisKey: "camera",
+        dataKeys: ["visionRange", "frameRate"],
+        dataKeysLabels: { visionRange: "有效感知距离(米)", frameRate: "采样帧率(FPS)" },
+        data: [
+          { camera: "前视三目摄像头", visionRange: 250, frameRate: 60 },
+          { camera: "侧后视摄像头(B柱)", visionRange: 100, frameRate: 30 },
+          { camera: "侧前视摄像头(翼子板)", visionRange: 80, frameRate: 30 },
+          { camera: "后视摄像头(尾门)", visionRange: 50, frameRate: 30 },
+          { camera: "舱内驾驶员监视器", visionRange: 2, frameRate: 60 }
+        ]
+      },
+      tablePreview: {
+        columns: ["警告阶段", "系统触发表现", "驾驶员应采取措施", "解除警告方法"],
+        rows: [
+          ["1 级提醒 (轻微)", "屏幕顶部出现白色闪烁提示框", "轻轻抖动方向盘或微调音量滚轮", "双手施加轻微转动扭矩"],
+          ["2 级警告 (中度)", "屏幕蓝光剧烈闪烁并伴随持续蜂鸣音", "立即目视前方并紧握方向盘", "纠正视线并保持注意力聚焦"],
+          ["3 级强退 (严重)", "发出警示音并强制退出 Autopilot", "靠边停车并切换至 P 挡重置", "记录 1 次 Strike（累积5次封禁）"]
+        ]
+      },
+      policySuggestions: [
+        "【安全须知】Autopilot 属于 Level 2 辅助驾驶，切勿使用遮挡贴纸或重力环欺骗系统，否则将极大增加事故风险。",
+        "【镜头清洁】雨雪天若提示‘摄像头受阻’，请使用麂皮布清洁前挡风玻璃及 B 柱摄像头镜片。"
+      ],
+      citationDocs: [
+        {
+          docId: "DOC-TESLA-AP-7.02",
+          title: "特斯拉车主手册 - 自动辅助驾驶",
+          section: "Section 7.02 - 自动辅助转向与驾驶员监视摄像头 (Autosteer & Cabin Camera)",
+          page: "P.210-212",
+          excerpt: "自动辅助转向通过纯视觉神经网络评估车道线与周围车辆。舱内摄像头位于后视镜上方，用于监测驾驶员注意力。切勿遮挡舱内摄像头。如果系统多次检测到注意力不集中并向驾驶员发出强退警告，Autopilot 权限将被挂起，需累计 5 次强制退出后停用 7 天。",
+          relevanceScore: 98.8,
+          warningLevel: "info",
+          version: "2026.4 CN v2 Edition"
+        }
+      ],
+      followUpPrompts: [
+        "前往超级充电站时电池预热有什么作用？冬季如何提升续航？",
+        "哨兵模式和行车记录仪如何配置 U 盘存储？提示速度过慢怎么处理？",
+        "仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车怎么处理？"
+      ]
+    }
+  },
+  {
+    turnIndex: 3,
+    title: "第3轮 [电池与超充]：电池预热原理与冬季续航管理",
+    category: "问数",
+    userPrompt: "前往超级充电站时电池预热有什么作用？冬季低温天气下如何优化续航衰减？",
+    assistantResult: {
+      intent: "问数",
+      thoughtProcess: "1. 挂载手册章节: Section 9.05 高压电池与热管理系统。\n2. 解析热泵/PTC回路与电机余热预热机制。\n3. 生成充放电效率曲线与冬季行车节能策略矩阵。",
+      summary: "【电池超级充电预热与冬季续航优化】\n1. 超充预热作用：当使用车机导航设定超级充电站为目的地时，热管理系统会提前 15-30 分钟利用电机电磁余热将高压电池加热至最佳吸电温度（35°C~45°C），可使峰值充电功率提升 40%~60%，节省约 15 分钟超充时间；\n2. 冬季续航优化三招：\n   ① 预设气候出发：插着充电枪时通过 Tesla App 设定‘按时出发’，直接消耗市电预热电池和座舱，避免消耗电池电量；\n   ② 善用座椅加热：优先开启座椅加热与方向盘加热，适当降低空调风扇挡位（空调热泵能耗远高于座椅加热）；\n   ③ 保持能量回收：设置能量回收制动为‘标准’，车机显示‘蓝色雪花’图标时表示电池过冷，行驶一段时间后恢复全额回收。",
+      kpiCards: [
+        { title: "超充预热提速", value: "+45%", unit: "峰值功率", trend: "缩短 15min", trendType: "up" },
+        { title: "预热目标温度", value: "35~45", unit: "℃理想区", trend: "电机余热供能", trendType: "up" },
+        { title: "市电预热节能", value: "12-18", unit: "km续航", trend: "App按时出发", trendType: "neutral" },
+        { title: "热泵空调效能", value: "3.5 COP", unit: "高效制热", trend: "集成热管理", trendType: "up" }
+      ],
+      chart: {
+        type: "line",
+        title: "未预热 vs 预热后电池超级充电功率 (kW) 随时间变化对比",
+        xAxisKey: "timeMin",
+        dataKeys: ["preheated", "coldBattery"],
+        dataKeysLabels: { preheated: "导航预热后超充功率(kW)", coldBattery: "未预热冷电池超充功率(kW)" },
+        data: [
+          { timeMin: "0 min", preheated: 250, coldBattery: 45 },
+          { timeMin: "5 min", preheated: 210, coldBattery: 65 },
+          { timeMin: "10 min", preheated: 170, coldBattery: 95 },
+          { timeMin: "15 min", preheated: 130, coldBattery: 110 },
+          { timeMin: "20 min", preheated: 95, coldBattery: 90 },
+          { timeMin: "25 min", preheated: 65, coldBattery: 60 }
+        ]
+      },
+      tablePreview: {
+        columns: ["冬季用车场景", "常见误区/痛点", "手册推荐最佳实践", "续航改善效果"],
+        rows: [
+          ["晨间露天冷启动", "直接上车开启 28℃ 大风量空调", "插枪状态在 App 开启‘按时出发/预热座舱’", "提升 10%~15% 初始续航"],
+          ["前往 V3/V4 超充站", "使用第三方手机导航前往超充站", "必须使用车机自带地图导航至超充站", "触发电池预热，充电峰值达 250kW"],
+          ["高速长途行驶", "频繁急加速与车速维持 130km/h+", "开启 AP 巡航维持 100-110km/h 经济时速", "减少 20% 风阻与高能耗开支"]
+        ]
+      },
+      policySuggestions: [
+        "【磷酸铁锂版本提醒】Model Y 后驱版（磷酸铁锂电池）建议每周至少充至 100% 一次，以校准 BMS 电池管理系统电量精度。",
+        "【长途规划】冬季跨省出行请在车机导航设置中开启‘自动包含充电停靠点’，车机会根据实时气温与海拔自动计算到达电量。"
+      ],
+      citationDocs: [
+        {
+          docId: "DOC-TESLA-BAT-9.05",
+          title: "特斯拉车主手册 - 高压电池管理",
+          section: "Section 9.05 - 低温气候作业与超级充电预热 (Cold Weather Best Practices)",
+          page: "P.285-287",
+          excerpt: "当您使用车载导航导航至特斯拉超级充电站时，Model Y 会分配能量来预加热电池，使其达到最佳充电温度。这可以显著缩短充电所需的时间。在寒冷天气下，由于电池过冷，可能会出现蓝色雪花图标，能量回收制动可能会受限，随着行驶中电池温度升高将自动恢复。",
+          relevanceScore: 99.1,
+          warningLevel: "info",
+          version: "2026.4 CN v2 Edition"
+        }
+      ],
+      followUpPrompts: [
+        "哨兵模式和行车记录仪如何配置 U 盘存储？提示速度过慢怎么处理？",
+        "仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车怎么处理？",
+        "查看车主手册关于保修条款与电池衰减合规规定"
+      ]
+    }
+  },
+  {
+    turnIndex: 4,
+    title: "第4轮 [哨兵模式与记录仪]：U 盘格式化与安全视频存证",
+    category: "问数",
+    userPrompt: "哨兵模式和行车记录仪如何配置 U 盘存储？如果提示 U 盘速度过慢或未格式化怎么处理？",
+    assistantResult: {
+      intent: "问数",
+      thoughtProcess: "1. 挂载手册章节: Section 11.03 哨兵模式与 Dashcam 存储。\n2. 分析接口位置: 副驾手套箱内部 USB 专口与 exFAT 格式化规约。\n3. 厘清视频写入速度与 20% 电池低电量关停保护。",
+      summary: "【哨兵模式与行车记录仪 U 盘存储配置指南】\n1. 物理位置与规格：请将存储 U 盘插在【副驾驶手套箱内部】的 USB 接口（具有防盗锁闭保护）。推荐使用容量 ≥ 64GB、持续随机写入速度 ≥ 4MB/s 的固态 U 盘或高耐久闪存盘；\n2. 格式化方法：在车机屏幕点击‘控制’ -> ‘安全’ -> 【格式化 USB 闪存盘】，系统会自动将其格式化为 exFAT 文件系统并新建 `TeslaCam` 根目录文件夹；\n3. 速度过慢/报错排查：若提示‘写入速度过慢’，通常是因为使用了普通劣质 U 盘或采用了 HUB 分接线。请更换支持 USB 3.1 协议的硬质固态闪存盘；\n4. 哨兵触发与电量保护：哨兵模式开启后，当车身传感器检测到有人靠近或碰撞时，会自动剪辑保存前 10 分钟视频。当动力电池电量降至 20% 以下时，哨兵模式将自动关停以防止电池耗尽。",
+      kpiCards: [
+        { title: "U 盘推荐容量", value: "≥ 64GB", unit: "exFAT 格式", trend: "手套箱专口", trendType: "up" },
+        { title: "写入速度门槛", value: "≥ 4 MB/s", unit: "持续写入", trend: "USB 3.1 规约", trendType: "neutral" },
+        { title: "哨兵保护底线", value: "20%", unit: "低电量关停", trend: "防止电池过放", trendType: "down" },
+        { title: "视频循环切片", value: "10 分钟", unit: "触发保存", trend: "四向视角同录", trendType: "up" }
+      ],
+      tablePreview: {
+        columns: ["常见报错提示", "可能原因分析", "官方手册解决步骤", "预防措施"],
+        rows: [
+          ["‘请插入包含 TeslaCam 的 U 盘’", "U 盘未格式化或缺少根目录", "车机中控 -> 控制 -> 安全 -> 格式化 USB 闪存盘", "切勿手动删除 U 盘内的文件夹"],
+          ["‘存储设备写入速度过慢’", "U 盘为 USB 2.0 或闪存颗粒衰减", "更换固态移动硬盘或特斯拉原厂 128GB 闪存盘", "避免使用无牌照劣质 U 盘"],
+          ["‘哨兵模式已关停’", "动力电池剩余电量 ≤ 20%", "连接充电枪补充电量至 20% 以上后重新启用", "可在 App 设置‘在家中停用哨兵’节能"]
+        ]
+      },
+      policySuggestions: [
+        "【隐私与合规】哨兵模式保存的视频仅存储在车内 U 盘中，不会上传至特斯拉云端服务器，保障隐私安全。",
+        "【手套箱 PIN 码】建议设置手套箱 PIN 码（控制->安全->手套箱 PIN 码），防止他人盗取 U 盘中的监控视频。"
+      ],
+      citationDocs: [
+        {
+          docId: "DOC-TESLA-SEC-11.03",
+          title: "特斯拉车主手册 - 安全与防盗",
+          section: "Section 11.03 - 哨兵模式 (Sentry Mode) 与 Dashcam 视频存储",
+          page: "P.330-332",
+          excerpt: "哨兵模式在车辆锁闭且处于 P 挡时监控周围环境。需要将格式化好的 USB 闪存盘插入手套箱中的 USB 端口。选择‘格式化 USB 闪存盘’后，车机会将其格式化为 exFAT 并创建 TeslaCam 文件夹。当电池电量降至或低于 20% 时，哨兵模式停用并弹出提示。",
+          relevanceScore: 97.9,
+          warningLevel: "warning",
+          version: "2026.4 CN v2 Edition"
+        }
+      ],
+      followUpPrompts: [
+        "仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车怎么处理？",
+        "如何通过手机 App 远程查看哨兵模式实时监控画面？",
+        "Model Y 的车机系统更新 (OTA) 失败如何强制重启重试？"
+      ]
+    }
+  },
+  {
+    turnIndex: 5,
+    title: "第5轮 [胎压与拖车救援]：TPMS 复位校准与平板拖车模式",
+    category: "问数",
+    userPrompt: "仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车，如何正确开启‘运输模式’？",
+    assistantResult: {
+      intent: "问数",
+      thoughtProcess: "1. 挂载手册章节: Section 13.08 轮胎维护与紧急道路救援。\n2. 分析 TPMS 蓝牙胎压传感器自动校准条件 (25km/h 行驶10分钟)。\n3. 严禁四轮着地拖拽警告 (Danger Warning) 与运输模式解锁操作步骤。",
+      summary: "【TPMS 胎压校准与紧急拖车运输模式指南】\n1. TPMS 胎压报警复位：\n   ① 检查气压：在冷胎状态下，将四个轮胎充气至标准标准值（Model Y 推荐 2.9 bar / 42 psi）；\n   ② 重置校准：在车机点击‘控制’ -> ‘服务’ -> ‘胎压/轮毂配置’，选择对应的轮毂尺寸；\n   ③ 自动学习：以 25 km/h 以上车速持续行驶约 10 分钟，TPMS 蓝牙传感器将自动完成学习与报警复位；\n2. 拖车救援 - ‘运输模式’开启：\n   ⚠️ 极度危险警告：特斯拉切勿采用四轮着地的方式拖拽！牵引电机旋转会产生强大反向感应电动势，可能引发电控烧毁或火灾事故。救援必须使用平板拖车！\n   操作步骤：车辆在 P 挡且踩下刹车，在车机点击‘控制’ -> ‘服务’ -> 【拖车/运输模式】，按住屏幕上的‘进入运输模式’按钮直至图标变绿。此时驻车制动解除，车辆处于自由滚动状态，可安全拉上平板拖车板。",
+      kpiCards: [
+        { title: "推荐冷胎气压", value: "2.9 bar", unit: "42 psi", trend: "冷胎状态测定", trendType: "neutral" },
+        { title: "TPMS 学习车速", value: "≥ 25 km/h", unit: "行驶 10 分钟", trend: "BLE 蓝牙传输", trendType: "up" },
+        { title: "拖车方式要求", value: "平板拖车", unit: "严禁地拖", trend: "防止电机倒灌", trendType: "down" },
+        { title: "运输模式解脱", value: "控制->服务", unit: "手刹解脱", trend: "确保 12V 供电", trendType: "neutral" }
+      ],
+      tablePreview: {
+        columns: ["道路救援场景", "禁止操作项", "官方手册合规流程", "应急小技巧"],
+        rows: [
+          ["轮胎扎钉/亏气", "在低胎压下高档高速行驶", "充气至 2.9 bar 后，在车机重新选择轮毂尺寸并行驶 10 分钟", "可通过车载充气泵补气后行驶至最近轮胎店"],
+          ["底盘电机故障/无法行驶", "使用绳索地拖拉行车辆", "联系 Tesla 官方救援或保险公司安排平板拖车", "进入‘运输模式’解除驻车手刹"],
+          ["低压 12V 电池断电无法开机", "强行推车或搭线错误", "打开前备箱盖板，用外部 12V 电源搭线激活车机后开启运输模式", "前挡风玻璃保险丝盒内有前备箱应急搭线端子"]
+        ]
+      },
+      policySuggestions: [
+        "【强力警告】任何因四轮着地拖拽导致电机或高压逆变器损坏的事故，均不在特斯拉官方保修覆盖范围内！",
+        "【气压受温度影响】外界气温每下降 6°C，胎压约下降 0.1 bar。冬季气温骤降时出现胎压报警属正常物理现象，补气后校准即可。"
+      ],
+      citationDocs: [
+        {
+          docId: "DOC-TESLA-TOW-13.08",
+          title: "特斯拉车主手册 - 道路救援与维护",
+          section: "Section 13.08 - 胎压监控系统 (TPMS) 与运输模式 (Transport Mode Instructions)",
+          page: "P.402-405",
+          excerpt: "警告：切勿在车轮接触地面的情况下拖拉 Model Y。否则可能会导致严重损坏和过热。这种损坏不在保修范围内。运输 Model Y 的唯一批准方法是使用平板拖车。如需开启运输模式，车辆必须处于 P 挡，点击控制 > 服务 > 拖车，按住‘进入运输模式’。轮胎气压调整后需在 25 km/h 以上行驶 10 分钟完成传感器自适应校准。",
+          relevanceScore: 99.8,
+          warningLevel: "danger",
+          version: "2026.4 CN v2 Edition"
+        }
+      ],
+      followUpPrompts: [
+        "导出本次《特斯拉 Model Y 车主手册智能问答》5轮完整研讨报告",
+        "查看车主手册关于三电系统 (电池/电机/电控) 8年保修条款",
+        "重新开始一轮车主手册问答"
+      ]
+    }
+  }
+];
+

@@ -189,6 +189,34 @@ export const ASSISTANT_LIST: AssistantItem[] = [
     iconColor: 'text-rose-600',
     slaMetric: '接入财政一体化平台',
     securityLevel: '财政资金机密级'
+  },
+  {
+    id: 'tesla-manual',
+    name: '特斯拉 Model Y/3 车主手册智能问答助手',
+    type: 'knowledge',
+    category: '智能车载与车主手册问答',
+    dept: 'Tesla Official Owner\'s Manual v2026.4 知识库',
+    description: '完整对接特斯拉官方车主手册（Model Y / Model 3），针对车门紧急机械解锁、Autopilot/FSD 辅助驾驶、电池超级充电预热、哨兵模式存证与 TPMS 胎压拖车救援提供精准解答与依据文档在线查看。',
+    capabilities: [
+      '车门无电紧急机械拉手与后排应急拉索精准定位',
+      'Autopilot / FSD 纯视觉摄像头与安全 Strike 限制解答',
+      '超级充电电池导航预热与冬季续航优化指南',
+      '哨兵模式与行车记录仪 U 盘格式化与低电关停机制',
+      'TPMS 蓝牙胎压复位校准与平板拖车‘运输模式’开启'
+    ],
+    tags: ['特斯拉车主手册', '紧急解锁拉手', 'Autopilot/FSD', '电池超充预热', '哨兵模式', '依据文档查看'],
+    recommendedPrompts: [
+      'Model Y 在断电或紧急情况下，前排和后排车门如何进行机械解锁逃生？',
+      '如何开启 Autopilot 自动辅助驾驶？驾驶员监视摄像头和前视摄像头有哪些触发限制？',
+      '前往超级充电站时电池预热有什么作用？冬季低温天气下如何优化续航衰减？',
+      '哨兵模式和行车记录仪如何配置 U 盘存储？如果提示 U 盘速度过慢或未格式化怎么处理？',
+      '仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车，如何正确开启‘运输模式’？'
+    ],
+    iconBg: 'bg-red-50 border-red-200',
+    iconColor: 'text-red-600',
+    isPopular: true,
+    slaMetric: '包含 1,850+ 官方知识节点 · 包含依据文档溯源',
+    securityLevel: '官方校验认证 · 依据文档可查'
   }
 ];
 

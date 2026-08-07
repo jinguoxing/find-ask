@@ -131,7 +131,106 @@ app.post("/api/chat", async (req, res) => {
     const lower = prompt.toLowerCase();
     let result;
 
-    if (lower.includes("合同") || lower.includes("审批") || lower.includes("条款") || lower.includes("合规") || lower.includes("采购") || lower.includes("违约") || lower.includes("风险")) {
+    if (lower.includes("特斯拉") || lower.includes("tesla") || lower.includes("model y") || lower.includes("model 3") || lower.includes("车门") || lower.includes("机械解锁") || lower.includes("拉手") || lower.includes("autopilot") || lower.includes("超充") || lower.includes("预热") || lower.includes("哨兵") || lower.includes("胎压") || lower.includes("tpms") || lower.includes("拖车") || lower.includes("运输模式") || lower.includes("手册")) {
+      if (lower.includes("车门") || lower.includes("解锁") || lower.includes("断电") || lower.includes("紧急逃生")) {
+        result = {
+          intent: "问数",
+          thoughtProcess: "1. 挂载知识库: 《特斯拉 Model Y 官方车主手册 v2026.4》- 章节 4.12 车辆无电状态下的车门打开。\n2. 匹配物理机械结构: 前排机械开关 vs 后排储物槽底盖应急拉索。\n3. 提取安全警告标识 (Warning) 与依据文档出处。",
+          summary: "【Model Y 车门紧急机械解锁操作指南】\n1. 前排车门：拉动位于车窗控制开关按钮正前方的【机械车门释放装置】（向上提起即可直接解锁弹开门锁）；\n2. 后排车门：需抬起后车门储物槽底部的软垫片，拔下内部的塑料密封橡胶盖，拉出其中的【紧急释放拉索】即可解锁后车门。\n重要提示：紧急机械拉手仅限 16V 低压供电断开或紧急故障时使用，正常状态下强行拉动可能磨损车门饰板或窗框密封条。",
+          kpiCards: [
+            { title: "前排解脱装置", value: "车窗按钮前", unit: "直接上提", trend: "100%物理结构", trendType: "neutral" },
+            { title: "后排解脱装置", value: "门槽底部盖", unit: "拉索解脱", trend: "需移除垫片", trendType: "neutral" },
+            { title: "适配低压电压", value: "16V / 12V", unit: "无电响应", trend: "纯机械连杆", trendType: "up" },
+            { title: "检索出处依据", value: "Sec 4.12", unit: "P.142-143", trend: "特斯拉官方认证", trendType: "neutral" }
+          ],
+          tablePreview: {
+            columns: ["车门位置", "解脱机构位置", "操作步骤与触发机制", "注意事项与安全级别"],
+            rows: [
+              ["前排左/右车门", "车窗按键正前方", "直接向上拉起机械拉手，释放门锁车勾", "🟢 简单直观，无电状态下 0.5s 快速弹门"],
+              ["后排左/右车门", "门板下储物槽底部", "1. 取出底部植绒垫片\n2. 移除橡胶盖\n3. 沿车尾方向拉动金属拉索", "🟡 需提前了解位置，建议车主为家庭成员演示"],
+              ["后备箱 (掀背门)", "尾门内饰板中央圆孔", "移除密封盖，用手指按下内部锁扣杠杆", "🔴 需从车内爬入后备箱，仅限车辆被淹等极度险情"]
+            ]
+          },
+          policySuggestions: [
+            "【安全建议】建议车主交车后熟悉后排门槽拉索位置，并在后排备有安全锤或急救应急工具。",
+            "【维护提醒】若非无电紧急情况，请勿频繁拉动前排机械拉手，以免中控屏提示‘车门未关紧’警告。"
+          ],
+          citationDocs: [
+            {
+              docId: "DOC-TESLA-MY-4.12",
+              title: "特斯拉 Model Y 车主手册 - 开启和关闭车门",
+              section: "Section 4.12 - 在无电情况下打开车门 (Opening Doors with No Power)",
+              page: "P.142-143",
+              excerpt: "如果 Model Y 失去电源，请按以下步骤手动打开车门：前排车门：向上拉动位于车窗开关前面的手动车门释放装置。后排车门： Model Y 的后车门配有手动车门释放装置，位于后车门储物槽底部。抬起储物槽底部的垫片，移除橡胶盖，然后向车尾方向拉动紧急释放拉索即可解脱门锁。",
+              relevanceScore: 99.4,
+              warningLevel: "warning",
+              version: "2026.4 CN v2 Edition"
+            }
+          ],
+          followUpPrompts: [
+            "如何开启 Autopilot 自动辅助驾驶，需要满足哪些摄像头条件？",
+            "前往超级充电站时电池预热有什么作用？冬季如何提升续航？",
+            "哨兵模式和行车记录仪如何配置 U 盘存储？提示速度过慢怎么处理？"
+          ]
+        };
+      } else if (lower.includes("autopilot") || lower.includes("fsd") || lower.includes("摄像头") || lower.includes("辅助驾驶")) {
+        result = {
+          intent: "问数",
+          thoughtProcess: "1. 检索手册章节: Section 7.02 Autopilot 自动辅助转向与驾驶员监控。\n2. 解析硬件要求: 8个车身摄像头、车内驾驶员专注度摄像头与驾驶杆/滚轮双击指令。\n3. 梳理安全罢工机制 (Safety Strikeout): 5次警告禁用规则。",
+          summary: "【Autopilot 自动辅助驾驶开启与安全监控】\n1. 激活操作：在中控屏‘控制’->‘Autopilot’中开启功能。行驶中连续向下拨动右侧控制杆两次（或快速双击方向盘右滚轮），中控屏车道线变蓝并伴随音效即已激活；\n2. 摄像头与监控：车内后视镜上方的【驾驶员监视摄像头】会实时捕捉眼球轨迹与头部姿态。若检测到驾驶员看手机、闭眼或手离开方向盘，系统将发出逐步升级的声光预警；\n3. 罢工封禁机制：若驾驶员忽视预警导致系统强制退出 Autopilot，累计 5 次‘安全罢工’后，车辆将在 7 天内禁止使用 Autopilot 辅助驾驶功能。",
+          kpiCards: [
+            { title: "激活操作方式", value: "杆/滚轮双击", unit: "蓝线确认", trend: "0.2s 快速响应", trendType: "up" },
+            { title: "车外感知视角", value: "8 个摄像头", unit: "360° 覆盖", trend: "纯视觉路线", trendType: "up" },
+            { title: "舱内监控类型", value: "驾驶员视角", unit: "眼球+双手", trend: "实时视线追踪", trendType: "neutral" },
+            { title: "安全 strike 限制", value: "5 次违规", unit: "封禁 7 天", trend: "强制安全规约", trendType: "down" }
+          ],
+          citationDocs: [
+            {
+              docId: "DOC-TESLA-AP-7.02",
+              title: "特斯拉车主手册 - 自动辅助驾驶",
+              section: "Section 7.02 - 自动辅助转向与驾驶员监视摄像头 (Autosteer & Cabin Camera)",
+              page: "P.210-212",
+              excerpt: "自动辅助转向通过纯视觉神经网络评估车道线与周围车辆。舱内摄像头位于后视镜上方，用于监测驾驶员注意力。切勿遮挡舱内摄像头。如果系统多次检测到注意力不集中并向驾驶员发出强退警告，Autopilot 权限将被挂起，需累计 5 次强制退出后停用 7 天。",
+              relevanceScore: 98.8,
+              warningLevel: "info",
+              version: "2026.4 CN v2 Edition"
+            }
+          ],
+          followUpPrompts: [
+            "前往超级充电站时电池预热有什么作用？冬季如何提升续航？",
+            "哨兵模式和行车记录仪如何配置 U 盘存储？提示速度过慢怎么处理？",
+            "仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车怎么处理？"
+          ]
+        };
+      } else {
+        result = {
+          intent: "问数",
+          thoughtProcess: "1. 挂载特斯拉官方知识库《Tesla Model Y/3 Owner Manual v2026.4》。\n2. 提取用户意图并检索安全警示、维保规约与出处章节。\n3. 生成包含依据文档 (Citation Docs) 的结构化解答。",
+          summary: "【特斯拉 Model Y / Model 3 车主手册智能解析】\n已为您检索特斯拉官方知识库。支持对车辆紧急解锁拉手、Autopilot/FSD 纯视觉辅助驾驶、电池超充导航预热、哨兵模式 U 盘配置及 TPMS 拖车运输模式进行精准问答并提供对应手册章节原文溯源。",
+          kpiCards: [
+            { title: "手册知识节点", value: "1850+", unit: "条规约", trend: "2026.4 升级版", trendType: "up" },
+            { title: "检索匹配精度", value: "99.4%", unit: "向量比对", trend: "100%可溯源", trendType: "neutral" }
+          ],
+          citationDocs: [
+            {
+              docId: "DOC-TESLA-GENERIC-01",
+              title: "特斯拉 Model Y 车主手册 - 规范与合规",
+              section: "Section 1.01 - 车辆概览与安全规约 (Vehicle Overview & Safety)",
+              page: "P.12-15",
+              excerpt: "本车主手册包含 Model Y 的各项操作说明、安全警告及维保指南。所有关于高压电池、电机驱动、辅助驾驶及紧急救护操作，均需按照手册标准步骤进行。",
+              relevanceScore: 98.0,
+              warningLevel: "info",
+              version: "2026.4 CN v2 Edition"
+            }
+          ],
+          followUpPrompts: [
+            "Model Y 在断电或紧急情况下，前排和后排车门如何进行机械解锁逃生？",
+            "前往超级充电站时电池预热有什么作用？冬季低温天气下如何优化续航衰减？",
+            "仪表显示胎压报警时如何校准 TPMS？如果在路边故障需要拖车怎么处理？"
+          ]
+        };
+      }
+    } else if (lower.includes("合同") || lower.includes("审批") || lower.includes("条款") || lower.includes("合规") || lower.includes("采购") || lower.includes("违约") || lower.includes("风险")) {
       result = {
         intent: "问数",
         thoughtProcess: "1. 识别知识库检索任务: 《项目合同合规审查与风险判定》。\n2. 挂载司法局与财政局政务采购知识库 (Ref: GW-2026-CONTRACT-088)。\n3. 执行合同条款向量匹配与法规算法比对，核查：预付款比例、履约保证金、账期结清时限、违约责任上降比例与政府采购目录限额。",
