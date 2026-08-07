@@ -1,0 +1,6 @@
+{
+  "name": "政务人口库智能找数问数平台",
+  "description": "基于政务人口库的大模型智能找数与问数助手，支持资产定位、表结构检索、数据血缘查看、自动生成SQL与维图表多视角政务分析。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
