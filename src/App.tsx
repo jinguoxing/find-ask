@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Header } from './components/Header';
 import { LeftSidebar } from './components/LeftSidebar';
 import { TeslaLeftSidebar } from './components/TeslaLeftSidebar';
+import { GovSemanticLeftSidebar } from './components/GovSemanticLeftSidebar';
 import { ChatArea } from './components/ChatArea';
 import { RightSidebar } from './components/RightSidebar';
 import { TeslaRightSidebar } from './components/TeslaRightSidebar';
+import { GovSemanticRightSidebar } from './components/GovSemanticRightSidebar';
 import { DatasetPreviewModal } from './components/DatasetPreviewModal';
 import { AIWorkbenchPage, ASSISTANT_LIST, AssistantItem } from './components/AIWorkbenchPage';
-import { PRESET_7_TURNS, TESLA_MANUAL_5_TURNS, POPULATION_CATALOG } from './data/presetConversations';
+import { PRESET_7_TURNS, TESLA_MANUAL_5_TURNS, GOV_SEMANTIC_5_TURNS, POPULATION_CATALOG, POPULATION_FIND_DATA_5_SCENARIOS, DECISION_FIND_DATA_3_SCENARIOS, REGISTER_MULTI_DOC_SCENARIO } from './data/presetConversations';
 import { ChatMessage, DatasetInfo, DatasetCatalogItem, PinnedChart, MessageResult } from './types';
 
 const formatTimestamp = (): string => {
@@ -19,6 +21,52 @@ const formatTimestamp = (): string => {
 const generateFallbackResult = (text: string): MessageResult => {
   const lower = text.toLowerCase();
   
+  // 3大决策型【数据发现】(Decision-oriented Data Discovery)
+  if (lower.includes('优先布局') || (lower.includes('老龄化') && lower.includes('养老服务资源')) || lower.includes('决策1') || (lower.includes('养老') && lower.includes('布局'))) {
+    return DECISION_FIND_DATA_3_SCENARIOS[0].assistantResult;
+  }
+  if (lower.includes('入学压力') || (lower.includes('学校资源') && lower.includes('提前规划')) || lower.includes('规划学校资源') || lower.includes('决策2')) {
+    return DECISION_FIND_DATA_3_SCENARIOS[1].assistantResult;
+  }
+  if (lower.includes('重点关注的人群') || lower.includes('服务资源投入方向') || (lower.includes('重点人口') && lower.includes('精准服务')) || lower.includes('决策3')) {
+    return DECISION_FIND_DATA_3_SCENARIOS[2].assistantResult;
+  }
+
+  // 多文档依据【企业开办/注册登记与许可】场景
+  if (lower.includes('注册') || lower.includes('企业开办') || lower.includes('特殊餐饮') || lower.includes('多文档') || lower.includes('依据多个文档') || lower.includes('跨文档') || lower.includes('注册登记') || lower.includes('许可办理')) {
+    return REGISTER_MULTI_DOC_SCENARIO.assistantResult;
+  }
+
+  // 5大核心【找数】场景匹配
+  if (lower.includes('近三年新生儿') || lower.includes('儿童数据资源')) {
+    return POPULATION_FIND_DATA_5_SCENARIOS[0].assistantResult;
+  }
+  if (lower.includes('涉及哪些字段，是否有脱敏') || lower.includes('老龄化情况及服务数据资源')) {
+    return POPULATION_FIND_DATA_5_SCENARIOS[1].assistantResult;
+  }
+  if (lower.includes('预测未来三年幼升小') || lower.includes('学龄儿童数据资源')) {
+    return POPULATION_FIND_DATA_5_SCENARIOS[2].assistantResult;
+  }
+  if (lower.includes('多代同堂') || lower.includes('分析家庭结构')) {
+    return POPULATION_FIND_DATA_5_SCENARIOS[3].assistantResult;
+  }
+  if (lower.includes('人口增长最快') || lower.includes('评估公共服务设施压力')) {
+    return POPULATION_FIND_DATA_5_SCENARIOS[4].assistantResult;
+  }
+  
+  if (lower.includes('语义') || lower.includes('口径') || lower.includes('指标字典') || lower.includes('异名同义') || lower.includes('同名异义') || lower.includes('血缘') || lower.includes('数据质量') || lower.includes('脱敏') || lower.includes('信用代码') || lower.includes('元数据') || lower.includes('映射表') || lower.includes('校验') || lower.includes('歧义')) {
+    if (lower.includes('映射') || lower.includes('困难群众') || lower.includes('低保')) {
+      return GOV_SEMANTIC_5_TURNS[1].assistantResult;
+    } else if (lower.includes('血缘') || lower.includes('链路') || lower.includes('dws_pop')) {
+      return GOV_SEMANTIC_5_TURNS[2].assistantResult;
+    } else if (lower.includes('身份证') || lower.includes('信用代码') || lower.includes('诊断') || lower.includes('sm4')) {
+      return GOV_SEMANTIC_5_TURNS[3].assistantResult;
+    } else if (lower.includes('字典') || lower.includes('api') || lower.includes('导出')) {
+      return GOV_SEMANTIC_5_TURNS[4].assistantResult;
+    }
+    return GOV_SEMANTIC_5_TURNS[0].assistantResult;
+  }
+
   if (lower.includes('特斯拉') || lower.includes('tesla') || lower.includes('model y') || lower.includes('model 3') || lower.includes('车门') || lower.includes('机械解锁') || lower.includes('拉手') || lower.includes('autopilot') || lower.includes('超充') || lower.includes('预热') || lower.includes('哨兵') || lower.includes('胎压') || lower.includes('tpms') || lower.includes('拖车') || lower.includes('运输模式') || lower.includes('车主手册')) {
     if (lower.includes('车门') || lower.includes('解锁') || lower.includes('断电') || lower.includes('逃生') || lower.includes('救援')) {
       return TESLA_MANUAL_5_TURNS[0].assistantResult;
@@ -103,7 +151,8 @@ export default function App() {
 
   const playTurn = (turnIndex: number, continueAutoPlay: boolean = false, targetAssistantId?: string) => {
     const isTesla = (targetAssistantId || activeAssistant.id) === 'tesla-manual';
-    const turnsArray = isTesla ? TESLA_MANUAL_5_TURNS : PRESET_7_TURNS;
+    const isGovSemantic = (targetAssistantId || activeAssistant.id) === 'gov-semantic';
+    const turnsArray = isGovSemantic ? GOV_SEMANTIC_5_TURNS : isTesla ? TESLA_MANUAL_5_TURNS : PRESET_7_TURNS;
     const turnData = turnsArray.find(t => t.turnIndex === turnIndex);
     if (!turnData) {
       setIsAutoPlaying(false);
@@ -175,7 +224,11 @@ export default function App() {
 
   const handleStartFullDemo = () => {
     if (isAutoPlaying) return;
-    if (activeAssistant.id === 'tesla-manual') {
+    if (activeAssistant.id === 'gov-semantic') {
+      setCurrentView('execution');
+      setIsAutoPlaying(true);
+      playTurn(1, true, 'gov-semantic');
+    } else if (activeAssistant.id === 'tesla-manual') {
       setCurrentView('execution');
       setIsAutoPlaying(true);
       playTurn(1, true, 'tesla-manual');
@@ -204,6 +257,15 @@ export default function App() {
     playTurn(turnIndex, false, 'tesla-manual');
   };
 
+  const handleSelectGovSemanticTurn = (turnIndex: number) => {
+    if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    setIsAutoPlaying(false);
+    const govAssistant = ASSISTANT_LIST.find(a => a.id === 'gov-semantic') || ASSISTANT_LIST[0];
+    setActiveAssistant(govAssistant);
+    setCurrentView('execution');
+    playTurn(turnIndex, false, 'gov-semantic');
+  };
+
   const handleReset = () => {
     if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
     setIsAutoPlaying(false);
@@ -221,7 +283,9 @@ export default function App() {
     // Switch to execution page and trigger initial scenario query
     setCurrentView('execution');
 
-    if (assistant.id === 'contract-knowledge') {
+    if (assistant.id === 'gov-semantic') {
+      handleSendMessage('治理“高龄津贴申请人数”与“高龄补贴发放人数”的统计口径冲突，梳理业务定义差异与统一指标口径。', assistant.id);
+    } else if (assistant.id === 'contract-knowledge') {
       handleSendMessage('审查《智慧城市三期建设项目合同》中的付款条款与违约责任风险', assistant.id);
     } else if (assistant.id === 'tesla-manual') {
       handleSendMessage('Model Y 在断电或紧急情况下，前排和后排车门如何进行机械解锁逃生？', assistant.id);
@@ -251,7 +315,9 @@ export default function App() {
       if (found) targetAssistant = found;
     } else {
       const lower = text.toLowerCase();
-      if (lower.includes('特斯拉') || lower.includes('tesla') || lower.includes('model y') || lower.includes('model 3') || lower.includes('车门') || lower.includes('机械解锁') || lower.includes('拉手') || lower.includes('autopilot') || lower.includes('超充') || lower.includes('电池预热') || lower.includes('哨兵') || lower.includes('胎压') || lower.includes('tpms') || lower.includes('拖车') || lower.includes('运输模式') || lower.includes('车主手册')) {
+      if (lower.includes('语义') || lower.includes('口径') || lower.includes('指标字典') || lower.includes('异名同义') || lower.includes('同名异义') || lower.includes('血缘') || lower.includes('数据质量') || lower.includes('元数据')) {
+        targetAssistant = ASSISTANT_LIST.find(a => a.id === 'gov-semantic') || ASSISTANT_LIST[0];
+      } else if (lower.includes('特斯拉') || lower.includes('tesla') || lower.includes('model y') || lower.includes('model 3') || lower.includes('车门') || lower.includes('机械解锁') || lower.includes('拉手') || lower.includes('autopilot') || lower.includes('超充') || lower.includes('电池预热') || lower.includes('哨兵') || lower.includes('胎压') || lower.includes('tpms') || lower.includes('拖车') || lower.includes('运输模式') || lower.includes('车主手册')) {
         targetAssistant = ASSISTANT_LIST.find(a => a.id === 'tesla-manual') || ASSISTANT_LIST[0];
       } else if (lower.includes('合同') || lower.includes('审批') || lower.includes('条款') || lower.includes('合规') || lower.includes('采购') || lower.includes('违约') || lower.includes('风险')) {
         targetAssistant = ASSISTANT_LIST[0]; // Contract
@@ -354,6 +420,7 @@ export default function App() {
   };
 
   const isTeslaMode = activeAssistant.id === 'tesla-manual';
+  const isGovSemanticMode = activeAssistant.id === 'gov-semantic';
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-slate-50 font-sans text-slate-800">
@@ -362,7 +429,13 @@ export default function App() {
         currentView={currentView}
         onChangeView={setCurrentView}
         currentTurn={currentTurn}
-        totalTurns={isTeslaMode ? TESLA_MANUAL_5_TURNS.length : PRESET_7_TURNS.length}
+        totalTurns={
+          isGovSemanticMode
+            ? GOV_SEMANTIC_5_TURNS.length
+            : isTeslaMode
+            ? TESLA_MANUAL_5_TURNS.length
+            : PRESET_7_TURNS.length
+        }
         isAutoPlaying={isAutoPlaying}
         onStartDemo={handleStartFullDemo}
         onReset={handleReset}
@@ -380,6 +453,44 @@ export default function App() {
           onSubmitQuery={(prompt, targetId) => handleSendMessage(prompt, targetId)}
           onNavigateToExecution={() => setCurrentView('execution')}
         />
+      ) : isGovSemanticMode ? (
+        /* Standalone Government Semantic Governance Execution Workspace */
+        <div className="flex flex-1 overflow-hidden relative bg-slate-950">
+          {/* Left Column: Governance Modules & 5-Turn Demo */}
+          <GovSemanticLeftSidebar
+            currentTurn={currentTurn}
+            onSelectGovSemanticTurn={handleSelectGovSemanticTurn}
+            onNewChat={handleReset}
+            onSearchQuery={handleSendMessage}
+          />
+
+          {/* Middle Column: Interactive Chat Area */}
+          <ChatArea
+            messages={messages}
+            isLoading={isLoading}
+            currentTurn={currentTurn}
+            totalTurns={GOV_SEMANTIC_5_TURNS.length}
+            isAutoPlaying={isAutoPlaying}
+            onSendMessage={handleSendMessage}
+            onSelectTurn={handleSelectGovSemanticTurn}
+            onInspectSql={handleInspectSql}
+            onPinChart={handlePinChart}
+            onOpenDatasetModal={tableName => setPreviewModalTableName(tableName)}
+            pinnedChartIds={pinnedCharts.map(p => p.id)}
+          />
+
+          {/* Right Column: Lineage Topology & Standards Inspector */}
+          {rightSidebarOpen && (
+            <GovSemanticRightSidebar
+              activeCitations={
+                messages.length > 0 && messages[messages.length - 1].result?.citationDocs
+                  ? messages[messages.length - 1].result?.citationDocs
+                  : undefined
+              }
+              onSearchTopic={handleSendMessage}
+            />
+          )}
+        </div>
       ) : isTeslaMode ? (
         /* Standalone Tesla Owner's Manual Execution Workspace */
         <div className="flex flex-1 overflow-hidden relative bg-slate-950">

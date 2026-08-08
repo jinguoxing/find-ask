@@ -24,7 +24,13 @@ import {
   Paperclip,
   RotateCw,
   Copy,
-  Download
+  Download,
+  Layers,
+  Network,
+  CheckCircle2,
+  Target,
+  FileText,
+  Compass
 } from 'lucide-react';
 import { ChatMessage, MessageResult, DatasetInfo, ChartData, PinnedChart } from '../types';
 import { CustomChart } from './Charts/CustomChart';
@@ -477,7 +483,204 @@ export const ChatArea: React.FC<Props> = ({
                         </div>
                       )}
 
-                      {/* 【找数】 Display Block: Dataset Details & Fields */}
+                      {/* 【决策型数据发现】 Decision-oriented Data Discovery Panel */}
+                      {result?.decisionDiscovery && (
+                        <div className="bg-gradient-to-br from-amber-50/90 via-orange-50/50 to-amber-100/30 border border-amber-200/80 rounded-2xl p-4 space-y-3.5 shadow-sm">
+                          {/* Header */}
+                          <div className="flex items-center justify-between border-b border-amber-200/60 pb-2.5">
+                            <div className="flex items-center space-x-2">
+                              <span className="p-1.5 bg-amber-500 text-white rounded-lg shadow-2xs">
+                                <Target className="w-4 h-4" />
+                              </span>
+                              <div>
+                                <h4 className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                                  <span>决策型数据发现 (Decision-oriented Data Discovery)</span>
+                                  <span className="text-[10px] px-2 py-0.5 bg-amber-200 text-amber-900 rounded font-mono font-semibold">Semovix AI Data Advisor</span>
+                                </h4>
+                                <p className="text-[10px] text-amber-800/80 mt-0.5">从业务决策目标倒推 ➔ 分析问题拆解 ➔ 抽象数据方案 ➔ 资产精选 ➔ 计算与报告生成</p>
+                              </div>
+                            </div>
+                            <span className="text-[10px] px-2 py-1 bg-white text-amber-800 border border-amber-300 rounded-lg shadow-2xs font-mono font-medium">
+                              全链路决策支撑
+                            </span>
+                          </div>
+
+                          {/* Step 1: Goal & Decomposition */}
+                          <div className="bg-white/90 rounded-xl p-3 border border-amber-100 space-y-2 shadow-2xs">
+                            <div className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                              <Compass className="w-4 h-4 text-amber-600" />
+                              <span>Step 1：理解业务目标与问题拆解</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                              <div className="bg-amber-50/60 p-2 rounded-lg border border-amber-100">
+                                <span className="text-amber-800 font-semibold">真实业务目标: </span>
+                                <span className="text-slate-800 font-medium">{result.decisionDiscovery.businessGoal}</span>
+                              </div>
+                              <div className="bg-amber-50/60 p-2 rounded-lg border border-amber-100">
+                                <span className="text-amber-800 font-semibold">核心分析对象: </span>
+                                <span className="text-slate-800 font-mono font-medium">{result.decisionDiscovery.targetObject}</span>
+                              </div>
+                            </div>
+                            
+                            <div className="text-[11px] text-slate-700 space-y-1 pt-1">
+                              <div className="font-semibold text-amber-900 flex items-center gap-1">
+                                <span>分析维度 & 决策目标:</span>
+                              </div>
+                              <div className="flex flex-wrap gap-1.5">
+                                {result.decisionDiscovery.analysisDimensions.map((dim, dIdx) => (
+                                  <span key={dIdx} className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border border-slate-200 text-[10px] font-medium">
+                                    {dim}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/80 text-[11px]">
+                              <span className="font-bold text-amber-800">决策路线图: </span>
+                              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1 mt-1 text-[10px] text-slate-700">
+                                {result.decisionDiscovery.planSteps.map((step, stIdx) => (
+                                  <div key={stIdx} className="flex items-center gap-1 bg-white p-1 rounded border border-slate-100">
+                                    <span className="text-amber-600 font-mono font-bold">0{stIdx + 1}.</span>
+                                    <span className="truncate">{step}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Step 2: Data Solution & Abstract Objects */}
+                          <div className="bg-white/90 rounded-xl p-3 border border-amber-100 space-y-2 shadow-2xs">
+                            <div className="text-xs font-bold text-amber-900 flex items-center justify-between">
+                              <span className="flex items-center gap-1.5">
+                                <Layers className="w-4 h-4 text-orange-500" />
+                                <span>Step 2 & 3：构建数据方案与推荐资产组合</span>
+                              </span>
+                              <span className="text-[10px] text-emerald-700 font-mono bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                {result.decisionDiscovery.solutionTitle}
+                              </span>
+                            </div>
+
+                            <p className="text-[11px] text-slate-600 bg-amber-50/50 p-2 rounded-lg border border-amber-100/60 leading-relaxed">
+                              <strong className="text-amber-900">推荐方案说明: </strong>
+                              {result.decisionDiscovery.solutionCoverageReason}
+                            </p>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                              {result.decisionDiscovery.dataObjects.map((obj, oIdx) => (
+                                <div key={oIdx} className="bg-slate-50 p-2 rounded-lg border border-slate-200 space-y-1">
+                                  <div className="text-[11px] font-bold text-slate-900 flex items-center justify-between">
+                                    <span>{obj.name}</span>
+                                    <span className="text-[9px] text-amber-700 bg-amber-100 px-1 rounded font-mono">{obj.type}</span>
+                                  </div>
+                                  <div className="text-[10px] text-slate-500 font-mono leading-tight truncate">
+                                    {obj.rulesOrFields}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Step 4 & 5: Decision Report Preview */}
+                          <div className="bg-slate-900 text-white rounded-xl p-3.5 space-y-2 shadow-xs border border-slate-800">
+                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                              <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                                <FileText className="w-4 h-4 text-amber-400" />
+                                <span>Step 4 & 5：自动计算问数 & 决策报告生成</span>
+                              </div>
+                              <span className="text-[10px] text-cyan-300 bg-slate-800 px-2 py-0.5 rounded border border-slate-700 font-mono">
+                                {result.decisionDiscovery.reportTitle}
+                              </span>
+                            </div>
+                            <div className="text-xs text-slate-300 leading-relaxed pt-0.5">
+                              <span className="text-amber-400 font-semibold">分析计算问题: </span>
+                              <span className="font-mono text-cyan-200">“{result.decisionDiscovery.executionQuestion}”</span>
+                            </div>
+                            <div className="text-xs text-slate-300 bg-slate-950 p-2.5 rounded-lg border border-slate-800/80 leading-relaxed">
+                              <span className="text-emerald-400 font-bold">决策报告核心摘要: </span>
+                              {result.decisionDiscovery.reportSummary}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 【找数】 Entity Lineage / Data Relationship Flow */}
+                      {result?.dataRelationshipFlow && result.dataRelationshipFlow.length > 0 && (
+                        <div className="bg-slate-900 text-white border border-slate-800 rounded-xl p-3.5 space-y-2 shadow-sm">
+                          <div className="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
+                            <Network className="w-4 h-4 text-cyan-400" />
+                            <span>AI 数据关系与实体下钻链路 (Entity Lineage & Topology):</span>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2 pt-1 font-mono text-xs">
+                            {result.dataRelationshipFlow.map((step, sIdx) => (
+                              <React.Fragment key={sIdx}>
+                                <span className="px-2.5 py-1 bg-slate-800 text-cyan-200 border border-slate-700/80 rounded-lg shadow-2xs font-medium">
+                                  {step}
+                                </span>
+                                {sIdx < result.dataRelationshipFlow!.length - 1 && (
+                                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                                )}
+                              </React.Fragment>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 【找数】 Recommended Data Assets Cards */}
+                      {result?.recommendationAssets && result.recommendationAssets.length > 0 && (
+                        <div className="space-y-2.5">
+                          <div className="text-xs font-bold text-slate-800 flex items-center justify-between">
+                            <span className="flex items-center gap-1.5">
+                              <Database className="w-4 h-4 text-amber-500" />
+                              AI 精准推荐的政务数据资产 ({result.recommendationAssets.length} 张库表):
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {result.recommendationAssets.map((asset, aIdx) => (
+                              <div
+                                key={aIdx}
+                                className="bg-white border border-slate-200 hover:border-blue-300 rounded-xl p-3 space-y-2 shadow-2xs transition"
+                              >
+                                <div className="flex items-start justify-between">
+                                  <div>
+                                    <div className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                                      <span className="text-blue-600 font-mono">[{asset.tableName}]</span>
+                                      <span>{asset.tableComment}</span>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 mt-0.5">
+                                      归属: <strong className="text-slate-700">{asset.dept}</strong> · 分类: <span className="text-indigo-600">{asset.category}</span>
+                                    </div>
+                                  </div>
+                                  <button
+                                    onClick={() => onOpenDatasetModal(asset.tableName)}
+                                    className="text-[10px] px-2 py-0.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded border border-blue-200 font-medium transition shrink-0"
+                                  >
+                                    预览表结构
+                                  </button>
+                                </div>
+
+                                <div className="text-xs text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100 leading-relaxed">
+                                  <span className="font-semibold text-amber-700">推荐理由: </span>
+                                  {asset.reason}
+                                </div>
+
+                                {asset.keyFields && asset.keyFields.length > 0 && (
+                                  <div className="flex flex-wrap gap-1 text-[10px] font-mono text-slate-500">
+                                    <span className="text-slate-400">核心字段:</span>
+                                    {asset.keyFields.map((field, fIdx) => (
+                                      <span key={fIdx} className="bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200 text-slate-700">
+                                        {field}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 【找数】 Display Block: Primary Dataset Details & Fields */}
                       {result?.datasetInfo && (
                         <div className="bg-white border border-slate-200 rounded-xl p-3.5 space-y-3 shadow-xs">
                           <div className="flex items-center justify-between border-b border-slate-100 pb-2">

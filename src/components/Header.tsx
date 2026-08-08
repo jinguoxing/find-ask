@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, ShieldCheck, Cpu, Play, RotateCcw, PanelRightOpen, PanelRightClose, Sparkles, LayoutGrid, FileCheck2, MessageSquare, Car } from 'lucide-react';
+import { Database, ShieldCheck, Cpu, Play, RotateCcw, PanelRightOpen, PanelRightClose, Sparkles, LayoutGrid, FileCheck2, MessageSquare, Car, Layers } from 'lucide-react';
 import { AssistantItem } from './AIWorkbenchPage';
 
 interface Props {
@@ -28,21 +28,40 @@ export const Header: React.FC<Props> = ({
   activeAssistant
 }) => {
   const isTesla = activeAssistant.id === 'tesla-manual';
+  const isGovSemantic = activeAssistant.id === 'gov-semantic';
   const isKnowledge = activeAssistant.type === 'knowledge';
 
   return (
-    <header className="h-14 bg-white border-b border-slate-200 text-slate-800 px-6 flex items-center justify-between shrink-0 z-20">
+    <header className="h-14 bg-white border-b border-slate-200 text-slate-800 px-6 flex items-center justify-between shrink-0 z-20 select-none">
       {/* Left: Branding & Active Assistant Badge */}
       <div className="flex items-center space-x-3">
-        <div className={`w-8 h-8 rounded-lg ${isTesla ? 'bg-red-600' : isKnowledge ? 'bg-amber-600' : 'bg-blue-600'} flex items-center justify-center text-white shrink-0 shadow-sm transition-colors`}>
-          {isTesla ? <Car className="w-4 h-4 text-white" /> : isKnowledge ? <FileCheck2 className="w-4 h-4 text-white" /> : <Database className="w-4 h-4 text-white" />}
+        <div className={`w-8 h-8 rounded-lg ${
+          isTesla ? 'bg-red-600' : isGovSemantic ? 'bg-teal-600' : isKnowledge ? 'bg-amber-600' : 'bg-blue-600'
+        } flex items-center justify-center text-white shrink-0 shadow-sm transition-colors`}>
+          {isTesla ? (
+            <Car className="w-4 h-4 text-white" />
+          ) : isGovSemantic ? (
+            <Layers className="w-4 h-4 text-white" />
+          ) : isKnowledge ? (
+            <FileCheck2 className="w-4 h-4 text-white" />
+          ) : (
+            <Database className="w-4 h-4 text-white" />
+          )}
         </div>
         <div>
           <div className="flex items-center space-x-2">
             <h1 className="text-base font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
               {activeAssistant.name}
-              <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${isTesla ? 'bg-red-50 text-red-700 border-red-200' : isKnowledge ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-blue-50 text-blue-600 border-blue-200'}`}>
-                {isTesla ? '车主手册知识库' : isKnowledge ? '知识型助手' : '数据型助手'}
+              <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${
+                isTesla
+                  ? 'bg-red-50 text-red-700 border-red-200'
+                  : isGovSemantic
+                  ? 'bg-teal-50 text-teal-700 border-teal-200'
+                  : isKnowledge
+                  ? 'bg-amber-50 text-amber-700 border-amber-200'
+                  : 'bg-blue-50 text-blue-600 border-blue-200'
+              }`}>
+                {isTesla ? '车主手册知识库' : isGovSemantic ? '政务语义治理' : isKnowledge ? '知识型助手' : '数据型助手'}
               </span>
             </h1>
           </div>
@@ -51,7 +70,7 @@ export const Header: React.FC<Props> = ({
             <span className="hidden sm:inline text-slate-300">|</span>
             <span className="hidden sm:inline text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded font-medium text-[11px] flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              {isTesla ? '官方手册依据检索可查' : '政务专网鉴权通过'}
+              {isTesla ? '官方手册依据检索可查' : isGovSemantic ? 'GB/T 38667 元数据标准认证' : '政务专网鉴权通过'}
             </span>
           </p>
         </div>
@@ -69,7 +88,7 @@ export const Header: React.FC<Props> = ({
         >
           <LayoutGrid className="w-3.5 h-3.5" />
           <span>AI 工作台</span>
-          <span className="text-[10px] bg-white/20 px-1.5 py-0.2 rounded font-mono font-normal">入口页</span>
+          <span className="text-[10px] bg-white/20 px-1.5 py-0.2 rounded font-mono font-normal">矩阵页</span>
         </button>
 
         <button
@@ -81,7 +100,7 @@ export const Header: React.FC<Props> = ({
           }`}
         >
           <MessageSquare className="w-3.5 h-3.5" />
-          <span>{isTesla ? '特斯拉手册执行页' : '对话执行分析页'}</span>
+          <span>{isTesla ? '特斯拉手册执行页' : isGovSemantic ? '政务语义治理执行页' : '对话执行分析页'}</span>
         </button>
       </div>
 
@@ -95,7 +114,13 @@ export const Header: React.FC<Props> = ({
               ? 'bg-amber-50 text-amber-700 border border-amber-300 cursor-wait'
               : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 active:scale-95 font-semibold'
           }`}
-          title={isTesla ? '自动演示特斯拉车主手册 5 轮问答' : '自动演示典型人口找数问数 7 轮对话'}
+          title={
+            isTesla
+              ? '自动演示特斯拉车主手册 5 轮问答'
+              : isGovSemantic
+              ? '自动演示 5 轮政务语义治理与口径消除流程'
+              : '自动演示典型人口找数问数 7 轮对话'
+          }
         >
           {isAutoPlaying ? (
             <>
@@ -104,8 +129,8 @@ export const Header: React.FC<Props> = ({
             </>
           ) : (
             <>
-              <Play className={`w-3.5 h-3.5 fill-current ${isTesla ? 'text-red-600' : 'text-blue-600'}`} />
-              <span>{isTesla ? '5轮特斯拉演示' : '7轮人口演示'}</span>
+              <Play className={`w-3.5 h-3.5 fill-current ${isTesla ? 'text-red-600' : isGovSemantic ? 'text-teal-600' : 'text-blue-600'}`} />
+              <span>{isTesla ? '5轮特斯拉演示' : isGovSemantic ? '5轮语义治理演示' : '7轮人口演示'}</span>
             </>
           )}
         </button>
@@ -135,5 +160,6 @@ export const Header: React.FC<Props> = ({
     </header>
   );
 };
+
 
 

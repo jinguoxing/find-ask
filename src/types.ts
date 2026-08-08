@@ -53,12 +53,39 @@ export interface CitationDoc {
   version?: string;
 }
 
+export interface RecommendationAsset {
+  tableName: string;
+  tableComment: string;
+  category: string;
+  dept: string;
+  reason: string;
+  relationChain?: string;
+  keyFields: string[];
+}
+
+export interface DecisionDiscoveryPlan {
+  businessGoal: string;
+  targetObject: string;
+  analysisDimensions: string[];
+  decisionTarget: string;
+  planSteps: string[];
+  dataObjects: { name: string; type: string; rulesOrFields: string }[];
+  solutionTitle: string;
+  solutionCoverageReason: string;
+  executionQuestion: string;
+  reportTitle: string;
+  reportSummary: string;
+}
+
 export interface MessageResult {
   intent: IntentType;
   thoughtProcess?: string;
   summary: string;
   sql?: string;
   datasetInfo?: DatasetInfo;
+  recommendationAssets?: RecommendationAsset[];
+  dataRelationshipFlow?: string[];
+  decisionDiscovery?: DecisionDiscoveryPlan;
   kpiCards?: KpiCard[];
   chart?: ChartData;
   tablePreview?: TablePreview;

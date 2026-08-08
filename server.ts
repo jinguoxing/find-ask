@@ -3,6 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import { DECISION_FIND_DATA_3_SCENARIOS, POPULATION_FIND_DATA_5_SCENARIOS, REGISTER_MULTI_DOC_SCENARIO } from "./src/data/presetConversations";
 
 dotenv.config();
 
@@ -90,6 +91,41 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "Missing prompt" });
     }
 
+    const lower = prompt.toLowerCase();
+
+    // 1. 3大决策型【数据发现】 Decision-oriented Data Discovery Scenarios
+    if (lower.includes('优先布局') || (lower.includes('老龄化') && lower.includes('养老服务资源')) || lower.includes('决策1') || (lower.includes('养老') && lower.includes('布局'))) {
+      return res.json({ success: true, result: DECISION_FIND_DATA_3_SCENARIOS[0].assistantResult });
+    }
+    if (lower.includes('入学压力') || (lower.includes('学校资源') && lower.includes('提前规划')) || lower.includes('规划学校资源') || lower.includes('决策2')) {
+      return res.json({ success: true, result: DECISION_FIND_DATA_3_SCENARIOS[1].assistantResult });
+    }
+    if (lower.includes('重点关注的人群') || lower.includes('服务资源投入方向') || (lower.includes('重点人口') && lower.includes('精准服务')) || lower.includes('决策3')) {
+      return res.json({ success: true, result: DECISION_FIND_DATA_3_SCENARIOS[2].assistantResult });
+    }
+
+    // 2. 多文档依据【企业开办/注册登记与许可】场景
+    if (lower.includes('注册') || lower.includes('企业开办') || lower.includes('特殊餐饮') || lower.includes('多文档') || lower.includes('依据多个文档') || lower.includes('跨文档') || lower.includes('注册登记') || lower.includes('许可办理')) {
+      return res.json({ success: true, result: REGISTER_MULTI_DOC_SCENARIO.assistantResult });
+    }
+
+    // 2. 5大基础【找数】场景
+    if (lower.includes('近三年新生儿') || lower.includes('儿童数据资源')) {
+      return res.json({ success: true, result: POPULATION_FIND_DATA_5_SCENARIOS[0].assistantResult });
+    }
+    if (lower.includes('涉及哪些字段，是否有脱敏') || lower.includes('老龄化情况及服务数据资源')) {
+      return res.json({ success: true, result: POPULATION_FIND_DATA_5_SCENARIOS[1].assistantResult });
+    }
+    if (lower.includes('预测未来三年幼升小') || lower.includes('学龄儿童数据资源')) {
+      return res.json({ success: true, result: POPULATION_FIND_DATA_5_SCENARIOS[2].assistantResult });
+    }
+    if (lower.includes('多代同堂') || lower.includes('分析家庭结构')) {
+      return res.json({ success: true, result: POPULATION_FIND_DATA_5_SCENARIOS[3].assistantResult });
+    }
+    if (lower.includes('人口增长最快') || lower.includes('评估公共服务设施压力')) {
+      return res.json({ success: true, result: POPULATION_FIND_DATA_5_SCENARIOS[4].assistantResult });
+    }
+
     const ai = getGeminiClient();
 
     if (ai) {
@@ -128,7 +164,6 @@ app.post("/api/chat", async (req, res) => {
     }
 
     // Smart Fallback Engine for Population Database & Contract Approval Knowledge scenarios
-    const lower = prompt.toLowerCase();
     let result;
 
     if (lower.includes("特斯拉") || lower.includes("tesla") || lower.includes("model y") || lower.includes("model 3") || lower.includes("车门") || lower.includes("机械解锁") || lower.includes("拉手") || lower.includes("autopilot") || lower.includes("超充") || lower.includes("预热") || lower.includes("哨兵") || lower.includes("胎压") || lower.includes("tpms") || lower.includes("拖车") || lower.includes("运输模式") || lower.includes("手册")) {

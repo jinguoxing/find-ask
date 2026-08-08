@@ -12,7 +12,9 @@ import {
   Briefcase,
   History,
   FileCode2,
-  ChevronRight
+  ChevronRight,
+  Network,
+  BookOpen
 } from 'lucide-react';
 import { PRESET_7_TURNS, POPULATION_CATALOG } from '../data/presetConversations';
 import { DatasetCatalogItem } from '../types';
@@ -186,11 +188,119 @@ export const LeftSidebar: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Section 3: Preset Query Shortcuts */}
+        {/* Section 3: 3大决策型【数据发现】(Decision-oriented Data Discovery) */}
+        <div>
+          <div className="text-[11px] font-bold text-amber-600 uppercase tracking-widest mb-2 px-1 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Network className="w-3.5 h-3.5 text-amber-500" />
+              3大决策型【数据发现】
+            </span>
+            <span className="text-[10px] text-amber-700 bg-amber-100 px-1 rounded font-mono font-bold">Semovix 升级</span>
+          </div>
+          <div className="grid grid-cols-1 gap-1.5">
+            <button
+              onClick={() => onSearchQuery('帮我分析闵行区老龄化情况，看看未来养老服务资源应该优先布局哪些区域。')}
+              className="text-left px-2.5 py-1.5 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-200 hover:border-amber-400 rounded text-[11px] text-amber-950 transition truncate shadow-2xs flex items-center gap-1.5 font-medium"
+            >
+              <span>👵</span>
+              <span className="truncate">决策1: 养老服务资源规划</span>
+            </button>
+            <button
+              onClick={() => onSearchQuery('帮我分析未来几年闵行哪些区域可能出现入学压力，需要提前规划学校资源。')}
+              className="text-left px-2.5 py-1.5 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-200 hover:border-amber-400 rounded text-[11px] text-amber-950 transition truncate shadow-2xs flex items-center gap-1.5 font-medium"
+            >
+              <span>🎒</span>
+              <span className="truncate">决策2: 学龄人口预测与教育资源</span>
+            </button>
+            <button
+              onClick={() => onSearchQuery('帮我识别闵行区需要重点关注的人群，并分析服务资源投入方向。')}
+              className="text-left px-2.5 py-1.5 bg-gradient-to-r from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 border border-amber-200 hover:border-amber-400 rounded text-[11px] text-amber-950 transition truncate shadow-2xs flex items-center gap-1.5 font-medium"
+            >
+              <span>❤️</span>
+              <span className="truncate">决策3: 重点人口精准服务</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Section 4: 5大政务【找数】专项场景 */}
+        <div>
+          <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Search className="w-3.5 h-3.5 text-amber-500" />
+              5大基础【找数】场景
+            </span>
+            <span className="text-[10px] text-slate-500 bg-slate-100 px-1 rounded font-mono">通用资产</span>
+          </div>
+          <div className="grid grid-cols-1 gap-1.5">
+            <button
+              onClick={() => onSearchQuery('想分析闵行区近三年新生儿情况，有哪些数据？')}
+              className="text-left px-2.5 py-1.5 bg-white hover:bg-amber-50 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded text-[11px] text-slate-700 transition truncate shadow-2xs flex items-center gap-1.5"
+            >
+              <span>👶</span>
+              <span className="truncate">场景1: 查找新生儿 / 儿童数据</span>
+            </button>
+            <button
+              onClick={() => onSearchQuery('我要分析闵行区老龄化情况，需要哪些数据？')}
+              className="text-left px-2.5 py-1.5 bg-white hover:bg-amber-50 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded text-[11px] text-slate-700 transition truncate shadow-2xs flex items-center gap-1.5"
+            >
+              <span>🧓</span>
+              <span className="truncate">场景2: 闵行老龄化服务四级找数</span>
+            </button>
+            <button
+              onClick={() => onSearchQuery('预测未来三年学龄儿童分布。')}
+              className="text-left px-2.5 py-1.5 bg-white hover:bg-amber-50 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded text-[11px] text-slate-700 transition truncate shadow-2xs flex items-center gap-1.5"
+            >
+              <span>🎒</span>
+              <span className="truncate">场景3: 人口 + 教育跨部门找数</span>
+            </button>
+            <button
+              onClick={() => onSearchQuery('我要分析家庭结构。')}
+              className="text-left px-2.5 py-1.5 bg-white hover:bg-amber-50 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded text-[11px] text-slate-700 transition truncate shadow-2xs flex items-center gap-1.5"
+            >
+              <span>👨‍👩‍👧</span>
+              <span className="truncate">场景4: 家庭成员与代际关系图谱</span>
+            </button>
+            <button
+              onClick={() => onSearchQuery('哪些区域人口增长快，需要增加公共服务？')}
+              className="text-left px-2.5 py-1.5 bg-white hover:bg-amber-50 hover:text-amber-800 border border-slate-200 hover:border-amber-300 rounded text-[11px] text-slate-700 transition truncate shadow-2xs flex items-center gap-1.5"
+            >
+              <span>📈</span>
+              <span className="truncate">场景5: 人口增长与服务压力数据</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Section 5: 多文档依据【企业开办与注册】问答 */}
+        <div>
+          <div className="text-[11px] font-bold text-rose-600 uppercase tracking-widest mb-2 px-1 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <BookOpen className="w-3.5 h-3.5 text-rose-500" />
+              多文档依据【企业注册】问答
+            </span>
+            <span className="text-[10px] text-rose-700 bg-rose-100 px-1 rounded font-mono font-bold">跨规范溯源</span>
+          </div>
+          <button
+            onClick={() => onSearchQuery('申请开办一家特殊餐饮企业（涉及连锁经营、现场制售与冷食类许可），办理注册登记需要满足哪些条件？请依据市场监管、食品安全及消防等相关规范文档进行综合解答。')}
+            className="w-full text-left p-2 bg-gradient-to-r from-rose-50 via-amber-50 to-orange-50 hover:from-rose-100 hover:to-orange-100 border border-rose-200 hover:border-rose-400 rounded-lg text-xs text-rose-950 transition shadow-2xs space-y-1"
+          >
+            <div className="font-bold flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                <span>📑</span>
+                <span>特殊餐饮企业开办注册与许可</span>
+              </span>
+              <span className="text-[9px] bg-rose-200 text-rose-900 px-1 rounded font-mono">依据 4 份文档</span>
+            </div>
+            <p className="text-[10px] text-slate-600 leading-tight">
+              融合《市场主体登记条例》《食品经营许可办法》《建筑防火通用规范》与一网通办免提交标准综合归纳。
+            </p>
+          </button>
+        </div>
+
+        {/* Section 6: Preset Query Shortcuts */}
         <div>
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2 px-1 flex items-center gap-1.5">
             <ListFilter className="w-3.5 h-3.5 text-emerald-600" />
-            政务常用问数场景
+            政务常用【问数】场景
           </div>
           <div className="grid grid-cols-1 gap-1.5">
             <button

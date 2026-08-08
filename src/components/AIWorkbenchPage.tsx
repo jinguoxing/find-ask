@@ -53,6 +53,31 @@ export interface AssistantItem {
 
 export const ASSISTANT_LIST: AssistantItem[] = [
   {
+    id: 'enterprise-register-knowledge',
+    name: '企业开办与注册登记多文档知识助手',
+    type: 'knowledge',
+    category: '行政审批与企业开办注册',
+    dept: '市市场监管局 / 审改办 / 消防救援局 / 数据局联合知识库',
+    description: '针对特殊行业企业设立注册、变更登记与行政许可，支持跨《市场主体登记条例》《食品经营许可办法》《建筑防火通用规范》《一网通办免提交规范》等多部门法规文档自动检索、条款比对、免提交材料归集与依据卡片溯源。',
+    capabilities: [
+      '跨市场监管、食药监、消防与数暴中心 4+ 规范文档比对归纳',
+      '自动识别“先照后证”与冷食专间硬件/消防等风险控制点',
+      '梳理一网通办 6 项电子证照自动免提交核验清单',
+      '一键提取原文切片条款 (Citation Snippets) 与核对依据'
+    ],
+    tags: ['多文档依据', '企业开办注册', '跨部门法规比对', '电子证照免提交', '审查溯源'],
+    recommendedPrompts: [
+      '申请开办一家特殊餐饮企业（涉及连锁经营、现场制售与冷食类许可），办理注册登记需要满足哪些条件？请依据市场监管、食品安全及消防等相关规范文档进行综合解答。',
+      '查询企业变更法定代表人所需的跨部门多文档核验清单',
+      '在一网通办申请‘证照联办’综合许可证操作指引'
+    ],
+    iconBg: 'bg-rose-50 border-rose-200',
+    iconColor: 'text-rose-600',
+    isPopular: true,
+    slaMetric: '依据 4 份官方文档 · 跨部门交叉比对',
+    securityLevel: '政务一网通办认证 · 原文可追溯'
+  },
+  {
     id: 'contract-knowledge',
     name: '项目合同审批知识助手',
     type: 'knowledge',
@@ -83,18 +108,20 @@ export const ASSISTANT_LIST: AssistantItem[] = [
     type: 'data',
     category: '政务数据找数问数',
     dept: '市大数据中心 / 人口库专网',
-    description: '穿透2185万常住人口库，支持自然语言SQL编译、年龄学历多维交叉下钻、自动脱敏与ECharts可视化图表渲染。',
+    description: '穿透2185万常住人口库，支持自然语言SQL编译、年龄学历多维交叉下钻、5大核心找数场景、自动脱敏与ECharts可视化图表渲染。',
     capabilities: [
+      '支持 5 大核心【找数】场景（新生儿/老龄化服务/人口+教育/家庭结构/人口压力热点）',
       '自然语言转化为 ANSI SQL 深度聚合算子',
       '身份证与姓名动态 Hash 掩码与脱敏导出',
-      '老龄化、流动人口、育儿津贴专题下钻',
-      '分布式计算引擎 2.5 秒内高并发响应'
+      '老龄化、流动人口、育儿津贴与家庭图谱专题下钻'
     ],
-    tags: ['数据找数问数', '自然语言SQL', '2185万人口库', 'ECharts导出'],
+    tags: ['5大找数场景', '自然语言SQL', '2185万人口库', '实体拓扑图谱', 'ECharts导出'],
     recommendedPrompts: [
-      '统计近5年全市各区60岁以上老年人口数量变化趋势及高龄津贴总额',
-      '查一下2024年各区高龄津贴领取人数和支出总额',
-      '分析近一年全市流动人口的主要来源省份Top 10及行业分布'
+      '想分析闵行区近三年新生儿情况，有哪些数据？',
+      '我要分析闵行区老龄化情况，需要哪些数据？',
+      '预测未来三年学龄儿童分布。',
+      '我要分析家庭结构。',
+      '哪些区域人口增长快，需要增加公共服务？'
     ],
     iconBg: 'bg-blue-50 border-blue-200',
     iconColor: 'text-blue-600',
@@ -189,6 +216,33 @@ export const ASSISTANT_LIST: AssistantItem[] = [
     iconColor: 'text-rose-600',
     slaMetric: '接入财政一体化平台',
     securityLevel: '财政资金机密级'
+  },
+  {
+    id: 'gov-semantic',
+    name: '政务数据语义治理与指标字典 Agent',
+    type: 'knowledge',
+    category: '政务数据治理与语义标准',
+    dept: '市大数据局 / 数据治理中心',
+    description: '针对政务跨部门“同名异义”、“异名同义”口径冲突开展语义关联对齐，提供字段级数据血缘追踪、元数据模型标准映射、统一指标字典导出与数据质量诊断分析。',
+    capabilities: [
+      '高龄津贴与低保补贴等跨部门统计口径歧义治理与消除',
+      '民政/医保/人社跨部门数据字段级语义血缘与映射字典',
+      '统一社会信用代码、身份证与行政区划数据规范诊断与脱敏',
+      '自动导出《政务统一数据标准指标字典 (v2026.1)》及 API'
+    ],
+    tags: ['语义治理', '指标字典', '数据血缘', '口径歧义消除', '元数据标准', '数据质量诊断'],
+    recommendedPrompts: [
+      '治理“高龄津贴申请人数”与“高龄补贴发放人数”的统计口径冲突并生成字典',
+      '建立民政“困难群众”与医保“低保救助人员”的跨部门数据语义映射表',
+      '分析数仓表 dws_pop_elderly_allowance_di 的字段级语义血缘与质量规约',
+      '诊断校验政务库表中的身份证号与统一社会信用代码合规性及脱敏加密',
+      '生成政务数据统一指标字典目录，并导出 API 语义标准化查询接口'
+    ],
+    iconBg: 'bg-teal-50 border-teal-200',
+    iconColor: 'text-teal-600',
+    isPopular: true,
+    slaMetric: '覆盖 3,500+ 政务指标定义 · 字段血缘精准穿透',
+    securityLevel: ' ISO/IEC 11179 & GB/T 38667'
   },
   {
     id: 'tesla-manual',
@@ -477,6 +531,18 @@ export const AIWorkbenchPage: React.FC<Props> = ({
                 >
                   <TrendingUp className="w-3 h-3 text-indigo-400" />
                   <span>@经济运行规上工业GDP分析</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const govAst = ASSISTANT_LIST.find(a => a.id === 'gov-semantic');
+                    setWorkbenchInput('[@政务数据语义治理与指标字典 Agent] 治理“高龄津贴申请人数”与“高龄补贴发放人数”的统计口径冲突并生成字典');
+                    if (govAst) setSelectedMentionAssistant(govAst);
+                  }}
+                  className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-teal-200 border border-teal-400/30 rounded-lg transition text-[11px] font-medium flex items-center gap-1"
+                >
+                  <Layers className="w-3 h-3 text-teal-400" />
+                  <span>@政务语义治理高龄津贴口径</span>
                 </button>
               </div>
             </form>
