@@ -12,6 +12,11 @@ const PORT = 3000;
 
 app.use(express.json());
 
+// Health check endpoint
+app.get("/api/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
 // Initialize Gemini SDK lazily if key is available
 const getGeminiClient = () => {
   const apiKey = process.env.GEMINI_API_KEY;
